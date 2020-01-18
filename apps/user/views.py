@@ -7,6 +7,7 @@ from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
 from itsdangerous import SignatureExpired
 from django.conf import settings
 from django.http import HttpResponse
+from django.core.mail import send_mail
 # Create your views here.
 
 def register(request):
@@ -84,8 +85,15 @@ class RegisterView(View):
         #加密用户信息
         serializer = Serializer(settings.SECRET_KEY, 3600)
         info = {'confirm':user.id}
-        token = serializer.dump(info)
+        token = serializer.dumps(info)
+        token = token.decode()
         #给用户发验证邮件
+        subject= '邮箱验证'
+        message = '<h1>%s, 请验证邮箱</h1><br/><br/>请点击链接激活账户<br/><a href="http://127.0.0.1:8000/user/active/%s">http://127.0.0.1:8000/user/active/%s</a>' % (username, token, token)
+        sender = settings.EMAIL_FROM
+        receiver = [email]
+        html_message = '<h1>%s, 请验证邮箱</h1><br/><br/>请点击链接激活账户<br/><a href="http://127.0.0.1:8000/user/active/%s">http://127.0.0.1:8000/user/active/%s</a>' % (username, token, token)
+        send_mail(subject, '', sender, receiver,html_message=html_message)
         # 返回应答,跳转到首页
         return redirect(reverse('goods:index'))
 
@@ -94,7 +102,7 @@ class ActiveView(View):
     def get(self, request, token):
         serializer = Serializer(settings.SECRET_KEY, 3600)
         try:
-            info = serializer.load(token)
+            info = serializer.loads(token)
             user_id = info['confirm']
             user = User.objects.get(id=user_id)
             user.is_active = 1
