@@ -45,7 +45,7 @@ INSTALLED_APPS = [
     'order', #订单
 ]
 
-MIDDLEWARE = [
+MIDDLEWARE_CLASSES = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -145,3 +145,25 @@ EMAIL_PORT = 25
 EMAIL_HOST_USER = '13897996141@163.com'
 EMAIL_HOST_PASSWORD = 'aA19940620'
 EMAIL_FROM = 'xueyi<13897996141@163.com>'
+
+#配置redis-session
+# SESSION_ENGINE='redis_sessions.session'
+# SESSION_REDIS_HOST='62.234.142.229'
+# SESSION_REDIS_PORT='6379'
+# SESSION_REDIS_DB = 2
+# SESSION_REDIS_PASSWORD=''
+# SESSION_REDIS_PREFIX='session'
+
+#django缓存配置
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://62.234.142.229:6379/9",
+        "OPTIONS":{
+            "CLIENT_CLASS": "django_redis.client.DefaultClient"
+        }
+    }
+}
+#配置session存储
+SESSION_ENGINE="django.contrib.sessions.backends.cache"
+SESSION_CACHE_ALIAS = "default"
