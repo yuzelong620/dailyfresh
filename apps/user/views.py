@@ -109,7 +109,7 @@ class ActiveView(View):
         except SignatureExpired as e:
             return HttpResponse('激活链接过期!')
 
-#登录
+#登录view
 class LoginView(View):
     def get(self,request):
         if 'username' in request.COOKIES:
