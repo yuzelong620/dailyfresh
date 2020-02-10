@@ -142,6 +142,7 @@ class LoginView(View):
                     response.set_cookie('username',username,max_age=7*24*3600)
                 else:
                     response.delete_cookie('username')
+
                 return response
             else:
                 return render(request, 'login.html',{'errmsg':'账户未激活!'})
