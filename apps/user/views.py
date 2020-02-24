@@ -133,8 +133,10 @@ class LoginView(View):
             if user.is_active:
                 #记录登录状态
                 login(request,user)
+                #获取登录后要跳转的地址
+                next_url = request.GET.get('next', reverse('goods:index'))
                 # 跳转首页
-                response = redirect(reverse('goods:index'))
+                response = redirect(next_url)
                 #判断是否需要记住用户名
                 remember =request.POST.get('remember')
                 if remember == 'on':
@@ -149,3 +151,19 @@ class LoginView(View):
         else:
             return render(request, 'login.html', {'errmsg':'用户名或密码错误!'})
 
+class UserInfoView(View):
+    '''用户中心页面跳转'''
+    def get(self, request):
+        return render(request, 'user_center_info.html', {'page':'user'})
+
+
+class UserOrderView(View):
+    '''用户订单页面跳转'''
+    def get(self, request):
+        return render(request, 'user_center_order.html', {'page':'order'})
+
+
+class AddressView(View):
+    '''用户中心地址页'''
+    def get(self,request):
+        return render(request, 'user_center_site.html',{'page':'address'})
