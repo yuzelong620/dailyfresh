@@ -133,7 +133,7 @@ class LoginView(View):
             if user.is_active:
                 #记录登录状态
                 login(request,user)
-                #获取登录后要跳转的地址
+                #获取登录后要跳 转的地址
                 next_url = request.GET.get('next', reverse('goods:index'))
                 # 跳转首页
                 response = redirect(next_url)
